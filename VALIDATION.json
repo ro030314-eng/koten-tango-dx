@@ -1,0 +1,37 @@
+{
+  "version": "3.0.0",
+  "counts": {
+    "words": 353,
+    "contexts": 135,
+    "mini": 152,
+    "culture": 175
+  },
+  "culture_by_category": {
+    "宮中・身分": 19,
+    "住居・調度": 14,
+    "装束・美意識": 12,
+    "恋愛・婚姻": 12,
+    "和歌・表現": 20,
+    "暦・時刻": 18,
+    "年中行事": 16,
+    "信仰・死生観": 16,
+    "旅・交通": 10,
+    "儀礼・人生": 9,
+    "文学・ジャンル": 20,
+    "生活・芸能": 9
+  },
+  "culture_by_level": {
+    "1": 50,
+    "2": 111,
+    "3": 14
+  },
+  "id_duplicates": 0,
+  "identical_question_duplicates": 0,
+  "duplicated_options": 0,
+  "answer_index_errors": 0,
+  "javascript_syntax": "pass",
+  "data_js_matches_json": true,
+  "zip_integrity": "pass",
+  "node_vm_interaction_smoke_test": "pass",
+  "full_browser_test": "not_completed"
+}
