@@ -1,6 +1,6 @@
 /* 古典単語DX : app shell offline cache */
-const CACHE='koten-dx-app-v3-20261123';
-const ASSETS=['./','./index.html','./style.css','./app.js','./data.js','./favicon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'];
+const CACHE='koten-dx-app-v3-1-20261123';
+const ASSETS=['./','./index.html','./style.css?v=3.1','./app.js?v=3.1','./data.js?v=3.1','./favicon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
 });

@@ -120,13 +120,13 @@
       ${learnCard('✓','4択テスト','似た意味に惑わされず、中心の意味を選ぼう。','quiz','4択で確認')}
       ${learnCard('✎','文脈で解く','短い作例の中で、言葉が何を意味するか考えよう。','context','読解力を鍛える')}
       ${learnCard('◈','古典ミニ演習','助動詞・敬語・活用・和歌・漢文を軽くチェック。','mini','文法も学ぶ')}
-      ${learnCard('⛩','古典常識','${DB.culture.length}問。宮中・装束・年中行事など、古文の世界を知る。','culture','古典の世界へ')}
+      ${learnCard('⛩','古典常識',`${DB.culture.length}問。宮中・装束・年中行事など、古文の世界を知る。`,'culture','古典の世界へ')}
       ${learnCard('⌕','単語帳',`${DB.words.length}語から検索。苦手な語はブックマークできる。`,'words','単語を調べる')}
-      ${learnCard('↻','苦手をやり直す',`今まで間違えた語：${weakWords().length}語。もう一度挑戦。`,'weak','復習に挑戦')}
+      ${learnCard('↻','苦手をやり直す',`今まで間違えた語：${weakWords().length}語。もう一度挑戦。`,'weak','復習に挑戦','review-card')}
     </div></section>
     <section class="section-space inline-banner"><div><strong>初めての人は、ここから。</strong><p class="small muted">${num(fresh)}語がまだ未学習。最初は正解率より、思い出す回数を増やすのがコツ。</p></div>${button('単語帳を開く','nav','btn-outline','data-page="words"')}</section>`;
   }
-  function learnCard(emoji,title,desc,page,cta){return `<div class="panel learn-card"><span class="learn-emoji" aria-hidden="true">${emoji}</span><h3>${title}</h3><p>${desc}</p><span class="card-bottom">${cta} →</span><button type="button" class="stretched" data-action="${page==='weak'?'weak':'nav'}" ${page==='weak'?'':`data-page="${page}"`} aria-label="${title}"></button></div>`;}
+  function learnCard(emoji,title,desc,page,cta,extraClass=''){return `<div class="panel learn-card ${safe(extraClass)}"><span class="learn-emoji" aria-hidden="true">${emoji}</span><h3>${title}</h3><p>${desc}</p><span class="card-bottom">${cta} →</span><button type="button" class="stretched" data-action="${page==='weak'?'weak':'nav'}" ${page==='weak'?'':`data-page="${page}"`} aria-label="${title}"></button></div>`;}
   function pageHead(eyebrow,title,desc,extra=''){return `<div class="page-head"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${desc}</p></div>${extra}</div>`;}
   function cardsPage(){
     if(state.cards){const s=state.cards;if(s.index>=s.items.length) return cardResult();const w=wordMap.get(s.items[s.index]);if(!w)return '<div class="empty">カードを表示できません。</div>';let eg=exampleMap.get(w.id);
@@ -136,7 +136,7 @@
         <button class="word-stage ${s.flipped?'is-flipped':''}" data-action="flip" type="button" aria-label="${s.flipped?'意味を表示中':'タップして意味を見る'}"><div class="stage-center">
         ${s.flipped?`<span class="stage-badge">答え合わせ</span><div class="stage-word" style="font-size:29px;margin:14px 0">${safe(w.word)}</div><div class="stage-meaning">${safe(w.meaning)}</div><p class="small muted" style="margin:12px auto">${safe(w.nuance)}</p>`:`<span class="stage-badge">${safe(w.category)}・${friendly(w.level)}</span><div class="stage-word">${safe(w.word)}</div><div class="reading">${safe(w.reading)}</div>`}</div>
         <div class="stage-foot">${s.flipped?'意味を見ずに答えられた？ 下のボタンで記録しよう':'カードをタップ・クリックしてめくる　↻'}</div></button>
-        ${s.flipped?`<div class="word-note"><strong>💡 覚えるコツ</strong><br>${safe(w.hook)}</div>${eg?`<div class="example-box">${highlightWord(eg.sentence,w.word)}<small>訳：${safe(eg.translation)}（DXオリジナル作例）</small></div>`:''}
+        ${s.flipped?`<div class="word-note"><strong>💡 覚えるコツ</strong><br>${safe(w.hook)}</div>${eg?`<div class="example-box">${highlightWord(eg.sentence,eg.focus || w.word)}<small>訳：${safe(eg.translation)}（DXオリジナル作例）</small></div>`:''}
           <div class="grade-buttons">
             ${button('↻ まだ…','cardGrade','btn-outline','data-rating="0"')}
             ${button('△ あやふや','cardGrade','btn-soft','data-rating="1"')}
@@ -162,7 +162,7 @@
     if(state.page==='culture'){
       const available=DB.culture.filter(q=>(state.cultureCat==='all'||q.category===state.cultureCat)&&(state.cultureLevel==='all'||String(q.level)===state.cultureLevel)).length;
       return `${pageHead('KOTEN CULTURE','古典常識','時代背景が見えると、古文は読みやすくなる。暮らし・宮中・季節・和歌の知識を実戦で。',meta(`${DB.culture.length}問`,'green'))}
-      <section class="panel stack culture-intro"><div class="pillline">${meta('全12分野','gold')}${meta('解説つき4択','green')}</div><h2>古典の世界へ、ようこそ。</h2><p class="muted">『源氏物語』の御簾、旧暦の七月、後朝の文。覚えた知識が、物語の意味をつなぐ。</p>
+      <section class="panel stack culture-intro"><div class="pillline">${meta(`全${cultureCats.length}分野`,'gold')}${meta('解説つき4択','green')}</div><h2>古典の世界へ、ようこそ。</h2><p class="muted">『源氏物語』の御簾、旧暦の七月、後朝の文。覚えた知識が、物語の意味をつなぐ。</p>
       <div class="settings-strip"><div class="field"><label for="culture-cat">分野</label><select id="culture-cat" data-field="cultureCat"><option value="all" ${state.cultureCat==='all'?'selected':''}>すべての分野</option>${cultureCats.map(c=>`<option value="${safe(c)}" ${state.cultureCat===c?'selected':''}>${safe(c)}</option>`).join('')}</select></div>
       <div class="field"><label for="culture-level">難易度</label><select id="culture-level" data-field="cultureLevel"><option value="all" ${state.cultureLevel==='all'?'selected':''}>すべて</option>${[1,2,3].map(n=>`<option value="${n}" ${state.cultureLevel===String(n)?'selected':''}>${friendly(n)}</option>`).join('')}</select></div>
       <div class="field"><label for="culture-count">出題数</label><select id="culture-count" data-field="cultureCount">${[5,10,20,30].map(n=>`<option value="${n}" ${state.cultureCount===String(n)?'selected':''}>${n}問</option>`).join('')}</select></div>
